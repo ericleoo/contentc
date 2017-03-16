@@ -3,3 +3,4 @@ University of California Berkeley
 Data Scientist
 Business Developer
 Business Development
+Won a programming competition
