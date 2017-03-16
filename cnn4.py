@@ -91,7 +91,7 @@ def load_vocab(vocab_path):
 
 def word2vec_embedding_layer(embeddings_path,y):
 	weights = np.load(open(embeddings_path, 'rb'))
-	layer = Embedding(input_dim = weights.shape[0], input_length = y, output_dim = weights.shape[1],weights = [weights],trainable=False)
+	layer = Embedding(input_dim = weights.shape[0], input_length = y, output_dim = weights.shape[1],weights = [weights],trainable = False)
 	return layer
 	
 word2idx, idx2word = load_vocab("vocab.voc")
@@ -170,9 +170,9 @@ print("Building model")
 
 fsz = 3
 dropout_prob = (0.2,0.2,0.2,0.1)
-num_filters = 100
+num_filters = 20
 
-graph_in = Input(shape=(maxLenSentence, 100))
+graph_in = Input(shape=(maxLenSentence, 20))
 conv = Convolution1D(nb_filter=num_filters,
 					 filter_length=fsz,
 					 border_mode='same',
@@ -180,6 +180,7 @@ conv = Convolution1D(nb_filter=num_filters,
 					 subsample_length=1)(graph_in)
 #pool = MaxPooling1D(pool_length=2)(conv)
 #pool = BatchNormalization()(pool)
+'''
 pool = Merge(mode = 'concat', concat_axis = 1)([conv,graph_in])
 conv = Convolution1D(nb_filter=num_filters,
 					 filter_length=fsz,
@@ -188,16 +189,17 @@ conv = Convolution1D(nb_filter=num_filters,
 					 subsample_length=1)(pool)
 #pool = MaxPooling1D(pool_length=2)(conv)
 #pool = BatchNormalization()(pool)
-pool = Merge(mode = 'concat', concat_axis = 1)([conv,graph_in])
-out = Flatten()(pool)
+'''
+#pool = Merge(mode = 'concat', concat_axis = 1)([conv,graph_in])
+out = Flatten()(conv)
 
 graph = Model(input=graph_in, output=out)
 
 # main sequential model
 
 main_input = Input(shape = (maxLenSentence,), dtype = 'int32', name = 'main_input')
-x = word2vec_embedding_layer("embedding.emb",maxLenSentence)(main_input)
-#x = Embedding(80448,100,input_length = maxLenSentence)(main_input)
+#x = word2vec_embedding_layer("embedding.emb",maxLenSentence)(main_input)
+x = Embedding(80448,20,input_length = maxLenSentence)(main_input)
 y = graph(x)
 x = Dense(len(labels))(y)
 out1 = Activation('softmax')(x)
