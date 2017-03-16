@@ -89,3 +89,4 @@ trainingInstances = sequence.pad_sequences(trainingInstances,maxlen=3104,value=0
 print("Predicting")
 Y_pred = model.predict(trainingInstances,batch_size=1,verbose=1)
 print(Y_pred)
+print(getLabels(Y_pred))
