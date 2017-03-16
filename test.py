@@ -1,3 +1,5 @@
+import re
+import json
 from keras.preprocessing import sequence
 from keras.models import model_from_json
 
@@ -28,7 +30,7 @@ sentences = open("test.txt","r").readlines()
 for i in range(len(sentences)): sentences[i] = sentences[i].strip()
 
 print("Reading training")
-for instance in trainSentences:
+for instance in sentences:
 	sentence = instance[:]
 	sentence = [it for it in re.split('[^a-z<>]',sentence) if it]
 	for i,word in enumerate(sentence):
@@ -41,7 +43,7 @@ for instance in trainSentences:
 
 print("Transforming instances")
 
-trainingInstances = sequence.pad_sequences(trainingInstances,maxlen=maxLenSentence,value=0.)
+trainingInstances = sequence.pad_sequences(trainingInstances,maxlen=3104,value=0.)
 
 print("Predicting")
 Y_pred = model.predict(trainingInstances,batch_size=1,verbose=1)
