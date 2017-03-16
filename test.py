@@ -6,7 +6,7 @@ from keras.models import model_from_json
 def clean(s,z=""):
     "clean sentences"
     words = s.split(' ')
-    PUNC = '‐‑‒–—―_,.:?!"()*-;/\\][{}]&­' + "'"
+    PUNC = '_,.:?!"()*-;/\\][{}]&-' + "'"
     URL = ["http",'ftp','://','.com','.net','.edu','.org','.uk','.gov']
     #stemmer = PorterStemmer()
     
